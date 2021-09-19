@@ -4,6 +4,7 @@ from django.db import models
 
 from team.models import Team
 
+
 class Tile(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
