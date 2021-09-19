@@ -1,0 +1,155 @@
+@font-face {
+    font-family: 'Gmarket Sans';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Gmarket Sans';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Gmarket Sans';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff') format('woff');
+    font-weight: 200;
+    font-style: normal;
+}
+
+
+* {
+    font-family: "Gmarket Sans", sans-serif;
+    transition: all 1s;
+}
+
+body {
+    margin: 3vmin;
+    overflow: hidden;
+    width: calc(100vw - 6vmin);
+    height: calc(100vh - 6vmin);
+    background-color: #f0f0f5;
+    display: flex;
+    flex-direction: column;
+    row-gap: 2vmin;
+    column-gap: 2vmin;
+}
+
+h1 {
+    margin: 0 0 10px;
+}
+
+h2 {
+    color: #3f3f3f;
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.title > h1 {
+    font-size: 3em;
+}
+
+.title > h2 {
+    font-weight: 200;
+    margin: 0;
+    font-size: 1em;
+    letter-spacing: 5px;
+}
+
+.box {
+    border-radius: 20px;
+    background-color: white;
+    padding: 4vmin;
+    box-sizing: border-box;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+}
+
+.teamList {
+    display: flex;
+    flex-direction: row;
+    row-gap: 2.5vmin;
+    column-gap: 2.5vmin;
+}
+
+.teamList > .box {
+    width: 100%;
+}
+
+.team {
+    display: flex;
+    flex-direction: column;
+    row-gap: 3vmin;
+}
+
+.team > .titleBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.team > .titleBar > .score {
+    background-color: #6b7af7;
+    color: white;
+    font-size: 1.2em;
+    padding: 1vmin 2vmin;
+    border-radius: 50px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+}
+
+.team > .titleBar > .title {
+    height: 100%;
+    line-height: 100%;
+    margin: 0;
+}
+
+
+.tile {
+    height: 84px;
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: rgba(107, 122, 247, 0.4);
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+.tile > img {
+    height: 20%;
+}
+
+.tilesWrapper {
+}
+
+.tilesWrapper > h2 {
+    margin-top: 0;
+    margin-bottom: 1vmin;
+}
+
+.tileList {
+    display: flex;
+    width: 100%;
+    column-gap: 1vmin;
+    row-gap: 1vmin;
+    flex-wrap: wrap;
+}
+
+.footer {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 200;
+    font-size: 0.7em;
+    color: #3f3f3f;
+}

@@ -4,33 +4,23 @@
 <head>
     <title>Dashboard</title>
     <link rel="stylesheet" type="text/css" href="{% static 'board/style.css' %}">
-
-    <script>
-        MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']]
-            },
-            svg: {
-                fontCache: 'global'
-            }
-        };
-    </script>
-    <script type="text/javascript" id="MathJax-script"
-            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
-    </script>
-
 </head>
 
 <body>
-    <div>
-        <h1>Deck</h1>
-        <div id="deck"></div>
+    <div class="title">
+        <h1>과학퀴즈</h1>
+        <h2>사이버이공계학생교류전</h2>
+    </div>
+    <div class="box">
+        <h1>남은 타일</h1>
+        <div id="deck" class="tileList"></div>
     </div>
 
-    <div id="team">
+    <div id="teams" class="teamList">
 
     </div>
 
+    <div class="footer">Github @betarixm</div>
     <script src="{% static 'board/main.js' %}"></script>
 </body>
 

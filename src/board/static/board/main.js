@@ -31,13 +31,16 @@ const queryTile = async (deck, team, is_allocated) => {
 const createTile = (tile) => {
     let result = document.createElement("div");
     result.className = "tile"
-    result.innerHTML = `$${tile.latex}$`;
+    result.innerHTML = `<img src="https://math.vercel.app/?from=${encodeURIComponent(tile.latex)}">`;
     return result;
 }
 
 const createTiles = (target, tileList) => {
     tileList.forEach((e) => {
-       target.appendChild(createTile(e));
+        if (e) {
+            target.appendChild(createTile(e));
+        }
+
     });
 }
 
@@ -53,6 +56,7 @@ const drawSubTiles = async (target, title, tiles) => {
     eleTitle.innerHTML = title;
 
     let eleTiles = document.createElement("div");
+    eleTiles.className = "tileList";
     createTiles(eleTiles, tiles);
 
     target.appendChild(eleTitle);
@@ -64,6 +68,7 @@ const drawTeams = async (target) => {
         target.innerHTML = "";
         res.forEach((team) => {
             const name = team.name;
+            const score = team.score;
 
             const notAllocTiles = team.slot.filter(s => {
                 return s.is_allocated === false;
@@ -78,18 +83,33 @@ const drawTeams = async (target) => {
             })
 
             let eleWrapper = document.createElement("div");
+            eleWrapper.className = "team box";
+
+            let eleTitleBar = document.createElement("div");
+            eleTitleBar.className = "titleBar";
 
             let eleTitle = document.createElement("h1");
             eleTitle.innerHTML = name;
+            eleTitle.className = "title";
 
+            let eleScore = document.createElement("div");
+            eleScore.innerHTML = score
+            eleScore.className = "score";
+
+            eleTitleBar.appendChild(eleTitle);
+            eleTitleBar.appendChild(eleScore);
 
             let eleNotAlloc = document.createElement("div");
-            drawSubTiles(eleNotAlloc, "아직", notAllocTiles);
+            eleNotAlloc.className = "tilesWrapper";
+
+            drawSubTiles(eleNotAlloc, "얻은 타일", notAllocTiles);
 
             let eleAlloc = document.createElement("div");
-            drawSubTiles(eleAlloc, "썼음", allocTiles);
+            eleAlloc.className = "tilesWrapper";
 
-            eleWrapper.appendChild(eleTitle);
+            drawSubTiles(eleAlloc, "배치한 수식", allocTiles);
+
+            eleWrapper.appendChild(eleTitleBar);
             eleWrapper.appendChild(eleNotAlloc);
             eleWrapper.appendChild(eleAlloc);
             target.appendChild(eleWrapper);
@@ -99,15 +119,15 @@ const drawTeams = async (target) => {
 
 const draw = () => {
     let deck = document.getElementById("deck");
-    let team = document.getElementById("team");
+    let teams = document.getElementById("teams");
 
     drawDeck(deck).then();
-    drawTeams(team).then();
+    drawTeams(teams).then();
 }
 
 
 document.body.onload = () => {
     setInterval(() => {
         draw();
-    }, 500);
+    }, 1500);
 }
