@@ -1,11 +1,11 @@
 from django.contrib import admin
-
+from adminsortable2.admin import SortableInlineAdminMixin
 from game.models import TileSlot
 
 from .models import Team
 
 
-class TileSlotInline(admin.TabularInline):
+class TileSlotInline(SortableInlineAdminMixin, admin.TabularInline):
     model = TileSlot
 
 
