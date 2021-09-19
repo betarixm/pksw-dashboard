@@ -18,9 +18,9 @@ class TileSerializer(serializers.ModelSerializer):
 
 
 class TileSlotSerializer(serializers.ModelSerializer):
-    tiles = TileSerializer(read_only=True)
+    tile = TileSerializer(read_only=True)
     team = serializers.ReadOnlyField(source="team.name")
 
     class Meta:
         model = TileSlot
-        fields = ("id", "tiles", "team")
+        fields = ("id", "tile", "team", "is_allocated")
