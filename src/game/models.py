@@ -16,7 +16,7 @@ class Tile(models.Model):
         verbose_name_plural = "타일들"
 
     def __str__(self):
-        return f"({str(self.slot.team) if self.slot.team else 'DECK'}) {self.title}"
+        return f"({str(self.slot.team) if hasattr(self, 'slot') and self.slot.team else 'DECK'}) {self.title}"
 
 
 class TileSlot(models.Model):
