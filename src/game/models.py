@@ -18,7 +18,9 @@ class Tile(models.Model):
 
 class TileSlot(models.Model):
     tile = models.OneToOneField(Tile, related_name="slot", on_delete=models.PROTECT)
-    team = models.ForeignKey(Team, related_name="team", on_delete=models.CASCADE, blank=True, null=True)
+    team = models.ForeignKey(
+        Team, related_name="team", on_delete=models.CASCADE, blank=True, null=True
+    )
 
     class Meta:
         verbose_name = "슬롯"
