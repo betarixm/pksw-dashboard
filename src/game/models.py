@@ -23,7 +23,7 @@ class TileSlot(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     tile = models.OneToOneField(
-        Tile, related_name="slot", on_delete=models.PROTECT, blank=True, null=True
+        Tile, related_name="slot", on_delete=models.CASCADE, blank=True, null=True
     )
 
     team = models.ForeignKey(
