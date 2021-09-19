@@ -15,7 +15,7 @@ class Tile(models.Model):
 
 
 class TileSlot(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4(), editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     tile = models.OneToOneField(Tile, related_name="slot", on_delete=models.PROTECT)
 
