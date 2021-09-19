@@ -14,11 +14,11 @@ class TileView(generics.ListAPIView):
     def get_queryset(self):
         queryset = Tile.objects.all().order_by("slot__order")
         team = self.request.query_params.get("team")
-        deck = self.request.query_params.get("deck")
+        deck = self.request.query_params.get("deck").lower()
         is_allocated = self.request.query_params.get("is_allocated")
 
-        if deck is not None:
-            return queryset.filter(slot__isnull=deck)
+        if deck in ["true"]:
+            return queryset.filter(slot__isnull=True if "true" else False)
 
         if team:
             queryset = queryset.filter(slot__team__name=team)
