@@ -2,6 +2,7 @@ import uuid
 
 from django.db import models
 
+from team.models import Team
 
 class Tile(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -18,6 +19,7 @@ class TileSlot(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     tile = models.OneToOneField(Tile, related_name="slot", on_delete=models.PROTECT)
+    team = models.ForeignKey(Team, related_name="team", on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "슬롯"
