@@ -10,4 +10,4 @@ class TeamSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Team
-        fields = ("id", "name", "slot")
+        fields = ("id", "name", "slot", "score")
