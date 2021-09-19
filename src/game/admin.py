@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Tile
+
+
+@admin.register(Tile)
+class TileAdmin(admin.ModelAdmin):
+    pass
