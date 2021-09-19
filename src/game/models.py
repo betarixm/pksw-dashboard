@@ -17,11 +17,10 @@ class Tile(models.Model):
 
 
 class TileSlot(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
     tile = models.OneToOneField(Tile, related_name="slot", on_delete=models.PROTECT)
     team = models.ForeignKey(Team, related_name="team", on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         verbose_name = "슬롯"
         verbose_name_plural = "슬롯들"
+        ordering = ["id"]
