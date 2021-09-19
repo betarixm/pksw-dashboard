@@ -20,18 +20,24 @@ class Tile(models.Model):
 
 
 class TileSlot(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
     tile = models.OneToOneField(
         Tile, related_name="slot", on_delete=models.PROTECT, blank=True, null=True
     )
 
     team = models.ForeignKey(
-        Team, related_name="team", on_delete=models.CASCADE, blank=True, null=True
+        Team, related_name="slot", on_delete=models.CASCADE, blank=True, null=True
     )
+
+    is_allocated = models.BooleanField("배치 여부")
+
+    order = models.PositiveBigIntegerField(default=0, blank=False, null=False)
 
     class Meta:
         verbose_name = "슬롯"
         verbose_name_plural = "슬롯들"
-        ordering = ["id"]
+        ordering = ["order"]
 
     def __str__(self):
         return f"({str(self.team) if self.team else 'DECK'}) {self.id}"
