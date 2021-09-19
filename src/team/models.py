@@ -7,6 +7,7 @@ class Team(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     name = models.CharField("이름", max_length=1000)
+    score = models.BigIntegerField("점수")
 
     class Meta:
         verbose_name = "팀"
