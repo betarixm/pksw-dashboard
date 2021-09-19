@@ -15,6 +15,9 @@ class Tile(models.Model):
         verbose_name = "타일"
         verbose_name_plural = "타일들"
 
+    def __str__(self):
+        return f"({str(self.slot.team) if self.slot.team else 'DECK'}) {self.title}"
+
 
 class TileSlot(models.Model):
     tile = models.OneToOneField(Tile, related_name="slot", on_delete=models.PROTECT)
@@ -26,3 +29,6 @@ class TileSlot(models.Model):
         verbose_name = "슬롯"
         verbose_name_plural = "슬롯들"
         ordering = ["id"]
+
+    def __str__(self):
+        return f"({str(self.team) if self.team else 'DECK'}) {self.id}"
