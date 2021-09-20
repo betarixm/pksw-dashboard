@@ -22,19 +22,16 @@
 
 * {
     font-family: "Gmarket Sans", sans-serif;
-    transition: all 1s;
+    transition: all 2s;
 }
 
 body {
     margin: 3vmin;
-    overflow: hidden;
-    width: calc(100vw - 6vmin);
-    height: calc(100vh - 6vmin);
     background-color: #f0f0f5;
+    overflow: hidden;
     display: flex;
-    flex-direction: column;
-    row-gap: 2vmin;
-    column-gap: 2vmin;
+    justify-content: center;
+    align-items: center;
 }
 
 h1 {
@@ -43,6 +40,15 @@ h1 {
 
 h2 {
     color: #3f3f3f;
+    margin: 0 0 5px;
+}
+
+#wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 2vmin;
+    column-gap: 2vmin;
 }
 
 .title {
@@ -85,7 +91,11 @@ h2 {
 .team {
     display: flex;
     flex-direction: column;
-    row-gap: 3vmin;
+    row-gap: 2vmin;
+}
+
+.team > h2 {
+    margin-bottom: 10px;
 }
 
 .team > .titleBar {
@@ -111,8 +121,8 @@ h2 {
 
 
 .tile {
-    height: 84px;
-    width: 60px;
+    height:70px;
+    width: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -130,7 +140,6 @@ h2 {
 
 .tilesWrapper > h2 {
     margin-top: 0;
-    margin-bottom: 1vmin;
 }
 
 .tileList {
@@ -142,14 +151,58 @@ h2 {
 }
 
 .footer {
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translate(-50%, 0);
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 200;
     font-size: 0.7em;
     color: #3f3f3f;
+    margin-top: 1.5vmin
+}
+
+.completedList {
+    display: flex;
+    flex-direction: row;
+    column-gap: 1vmin;
+    width: 100%;
+    align-items: center;
+
+}
+
+.completedList > .completed {
+    display: flex;
+    flex-direction: row;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+    padding: 1vmin;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    column-gap: 1vmin;
+    flex-wrap: wrap;
+}
+
+.completedList > .completed > h2 {
+    font-size: 1em;
+    height: 1em;
+    line-height: 1em;
+    transform: translateY(25%);
+}
+
+.completedList > .completed > .title {
+    display: none;
+}
+.completedList > .completed > .tileList {
+    width: auto;
+}
+
+.completedList > .completed > .tileList > .tile {
+    padding-left: 0.5vmin;
+    padding-right: 0.5vmin;
+    width: auto;
+    min-width: 20px;
+    height: 40px;
+}
+
+.completedList > .completed > .tileList > .tile > img {
+    height: 35%;
 }

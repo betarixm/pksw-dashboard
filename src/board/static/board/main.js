@@ -1,133 +1,341 @@
-const queryTeams = async () => {
-    return new Promise((resolve) => {
-        fetch(`/api/team/team`).then((res) => {
+class Tile {
+    constructor(id, title, latex) {
+        this.id = id;
+        this.title = title;
+        this.latex = latex;
+    }
+
+    createElement() {
+        let element = document.createElement("div");
+        let img = document.createElement("img");
+
+        element.id = this.id;
+        element.className = "tile";
+
+        img.src = `https://math.vercel.app/?from=${encodeURIComponent(this.latex)}`;
+
+        element.appendChild(img);
+
+        return element;
+    }
+
+    getElement() {
+        return document.getElementById(this.id);
+    }
+}
+
+class Expression {
+    constructor(id, title, completed, tileList) {
+        this.id = id;
+        this.title = title;
+        this.tileList = tileList;
+        this.completed = completed;
+    }
+
+    createElement() {
+        let wrapper = document.createElement("div");
+        let title = document.createElement("h2");
+        let list = document.createElement("div");
+
+        wrapper.id = this.id;
+        wrapper.className = "completed";
+
+        title.innerText = this.title;
+
+        list.className = "tileList";
+
+        this.tileList.forEach((e) => {
+            list.appendChild(e.createElement());
+        })
+
+        wrapper.appendChild(title);
+        wrapper.appendChild(list);
+
+        return wrapper;
+    }
+
+    updateElement(tileList) {
+        const parent = document.getElementById(this.id).querySelector(".tileList");
+
+        this.tileList.filter((tile) => {
+            return !tileList.map(e => e.id).includes(tile.id);
+        }).forEach((r) => {
+            console.log(r);
+            document.getElementById(this.id).querySelector(`#${r.id}`).remove();
+        })
+
+        let prev = null;
+
+        tileList.forEach((tile) => {
+            let e = tile.getElement();
+            if (e === null) {
+                e = tile.createElement();
+            }
+
+            if (prev === null) {
+                parent.prepend(e);
+            } else {
+                prev.after(e);
+            }
+
+            prev = e;
+        });
+
+        this.tileList = tileList;
+    }
+}
+
+class Hands {
+    constructor(id, tileList) {
+        this.id = id;
+        this.tileList = tileList;
+    }
+
+    createElement() {
+        let wrapper = document.createElement("div");
+        let title = document.createElement("h2");
+        let list = document.createElement("div");
+
+        wrapper.id = this.id + "-hands";
+
+        title.innerText = "얻은 타일";
+
+        list.className = "tileList";
+
+        this.tileList.forEach((e) => {
+            let c = e.createElement();
+            list.appendChild(c);
+        })
+
+        wrapper.appendChild(title);
+        wrapper.appendChild(list);
+
+        return wrapper;
+    }
+
+    updateElement(tileList) {
+        const parent = document.getElementById(this.id + "-hands").querySelector(".tileList");
+
+        this.tileList.filter((tile) => {
+            return !tileList.map(e => e.id).includes(tile.id);
+        }).forEach((r) => {
+            document.getElementById(this.id + "-hands").querySelector(`#${r.id}`).remove();
+        })
+
+        tileList.filter((tile) => {
+            return !this.tileList.map(e => e.id).includes(tile.id);
+        }).forEach((r) => {
+            parent.appendChild(r.createElement());
+        })
+
+        this.tileList = tileList;
+    }
+
+    async parse() {
+        return new Promise((resolve, reject) => {
+            fetch(`/api/game/hand?id=${this.id}`).then((res) => {
+                return res.json();
+            }).then((res) => {
+                const tileList = res.map((e) => {
+                    return new Tile(e.id, e.title, e.latex);
+                });
+
+                this.updateElement(tileList);
+            });
+        });
+    }
+}
+
+class Deck {
+    constructor(tileList) {
+        this.id = Math.random().toString(16).slice(2);
+        this.tileList = tileList;
+    }
+
+    createElement() {
+        let wrapper = document.createElement("div");
+        let title = document.createElement("h1");
+        let list = document.createElement("div");
+
+        wrapper.id = "deckHolder"; //this.id;
+        wrapper.className = "box";
+
+        title.innerText = "남은 타일";
+
+        list.className = "tileList";
+
+        this.tileList.forEach((e) => {
+            let c = e.createElement();
+            list.appendChild(c);
+        });
+
+        wrapper.appendChild(title);
+        wrapper.appendChild(list);
+
+        return wrapper;
+    }
+
+    updateElement(tileList) {
+        const parent = document.getElementById(this.id).querySelector(".tileList");
+
+        this.tileList.filter((tile) => {
+            return !tileList.map(e => e.id).includes(tile.id);
+        }).forEach((r) => {
+            document.getElementById(this.id).querySelector(`#${r.id}`).remove();
+        })
+
+        tileList.filter((tile) => {
+            return !this.tileList.map(e => e.id).includes(tile.id);
+        }).forEach((r) => {
+            parent.appendChild(r.createElement());
+        })
+
+        this.tileList = tileList;
+    }
+
+    async parse() {
+        return new Promise((resolve, reject) => {
+            fetch(`/api/game/deck`).then((res) => {
+                return res.json();
+            }).then((res) => {
+                const tileList = res.map((e) => {
+                    return new Tile(e.id, e.title, e.latex);
+                });
+
+                this.updateElement(tileList);
+            });
+        });
+    }
+}
+
+
+class Team {
+    constructor(id, name, score, hands, expressions) {
+        this.id = id;
+        this.name = name;
+        this.score = score;
+        this.hands = hands;
+        this.expressions = expressions;
+    }
+
+    createElement() {
+        let wrapper = document.createElement("div");
+        let titleBar = document.createElement("div");
+        let title = document.createElement("h1");
+        let score = document.createElement("div");
+        let completed = document.createElement("div");
+
+        wrapper.id = this.id;
+
+        wrapper.className = "team box";
+        titleBar.className = "titleBar";
+        title.className = "title";
+        score.className = "score";
+        completed.className = "completedList";
+
+        title.innerText = this.name;
+        score.innerText = this.score;
+
+        this.expressions.filter(e => e.completed).forEach((e) => {
+            completed.appendChild(e.createElement());
+        });
+
+        titleBar.appendChild(title);
+        titleBar.appendChild(score);
+
+        wrapper.appendChild(titleBar);
+        wrapper.appendChild(this.hands.createElement());
+
+        this.expressions.filter(e => !e.completed).forEach((e) => {
+            wrapper.appendChild(e.createElement());
+        })
+
+        wrapper.appendChild(completed);
+
+        return wrapper;
+    }
+
+    parse() {
+        fetch(`/api/team/team?id=${this.id}`).then((res) => {
             return res.json();
         }).then((res) => {
-            resolve(res);
-        })
-    })
-}
+            res = res[0];
 
-const queryTeamByName = async (name) => {
-    return new Promise((resolve) => {
-        fetch(`/api/team/team?name=${name}`).then((res) => {
-            return res.json();
+            document.getElementById(this.id).querySelector(".score").innerText = res.score;
+
+            const parent = document.getElementById(this.id);
+
+            const expressions = res.expression.map((exp) => {
+                return new Expression(exp.id, exp.title, exp.is_completed, exp.slot.map(s => {
+                    return new Tile(s.tile.id, s.tile.title, s.tile.latex);
+                }))
+            });
+
+
+            this.expressions.filter((exp) => {
+                return !expressions.map(e => e.id).includes(exp.id);
+            }).forEach((r) => {
+                document.getElementById(this.id).querySelector(`#${r.id}`).remove();
+            });
+
+            expressions.filter((exp) => {
+                return !this.expressions.map(e => e.id).includes(exp.id);
+            }).forEach((r) => {
+                parent.appendChild(r.createElement());
+            });
+
+            this.expressions.filter((exp) => {
+                return expressions.map(e => e.id).includes(exp.id);
+            }).forEach((r) => {
+                r.updateElement(expressions.filter(e => e.id === r.id)[0].tileList);
+            });
+
+            this.expressions = expressions;
+
         }).then((res) => {
-            resolve(res);
-        })
-    })
+            this.hands.parse();
+        });
+    }
 }
 
-const queryTile = async (deck, team, is_allocated) => {
-    return new Promise((resolve) => {
-        fetch(`/api/game/tile?deck=${deck}&team=${team}&is_allocated=${is_allocated}`).then((res) => {
-            return res.json();
-        }).then((res) => {
-            resolve(res);
-        })
-    })
-}
+setInterval(() => {
+    fetch(`/api/team/team`).then((res) => {
+        return res.json();
+    }).then((res) => {
+        const teamList = res.map((team) => {
+            const hands = new Hands(team.id, team.hands.map(e => {
+                return new Tile(e.id, e.title, e.latex);
+            }))
 
-const createTile = (tile) => {
-    let result = document.createElement("div");
-    result.className = "tile"
-    result.innerHTML = `<img src="https://math.vercel.app/?from=${encodeURIComponent(tile.latex)}">`;
-    return result;
-}
-
-const createTiles = (target, tileList) => {
-    tileList.forEach((e) => {
-        if (e) {
-            target.appendChild(createTile(e));
-        }
-
-    });
-}
-
-const drawDeck = async (target) => {
-    queryTile(true, "", true).then((res) => {
-        target.innerHTML = "";
-        createTiles(target, res);
-    });
-}
-
-const drawSubTiles = async (target, title, tiles) => {
-    let eleTitle = document.createElement("h2");
-    eleTitle.innerHTML = title;
-
-    let eleTiles = document.createElement("div");
-    eleTiles.className = "tileList";
-    createTiles(eleTiles, tiles);
-
-    target.appendChild(eleTitle);
-    target.appendChild(eleTiles);
-}
-
-const drawTeams = async (target) => {
-    queryTeams().then((res) => {
-        target.innerHTML = "";
-        res.forEach((team) => {
-            const name = team.name;
-            const score = team.score;
-
-            const notAllocTiles = team.slot.filter(s => {
-                return s.is_allocated === false;
-            }).map((s) => {
-                return s.tile;
+            const expressions = team.expression.map((exp) => {
+                return new Expression(exp.id, exp.title, exp.is_completed, exp.slot.map(s => {
+                    return new Tile(s.tile.id, s.tile.title, s.tile.latex);
+                }))
             })
 
-            const allocTiles = team.slot.filter(s => {
-                return s.is_allocated === true;
-            }).map((s) => {
-                return s.tile;
-            })
+            return new Team(team.id, team.name, team.score, hands, expressions);
+        });
 
-            let eleWrapper = document.createElement("div");
-            eleWrapper.className = "team box";
+        teamList.forEach((t) => {
+            if (document.getElementById(t.id) === null) {
+                document.getElementById("teamsHolder").appendChild(t.createElement());
+            } else {
+                document.getElementById(t.id).replaceWith(t.createElement());
+            }
+        });
+    });
+}, 1000);
 
-            let eleTitleBar = document.createElement("div");
-            eleTitleBar.className = "titleBar";
+setInterval(() => {
+    fetch(`/api/game/deck`).then((res) => {
+        return res.json();
+    }).then((res) => {
+        const deck = new Deck(res.map((tile) => {
+            return new Tile(tile.id, tile.title, tile.latex);
+        }))
 
-            let eleTitle = document.createElement("h1");
-            eleTitle.innerHTML = name;
-            eleTitle.className = "title";
+        let target = document.getElementById("deckHolder");
+        target.replaceWith(deck.createElement());
 
-            let eleScore = document.createElement("div");
-            eleScore.innerHTML = score
-            eleScore.className = "score";
-
-            eleTitleBar.appendChild(eleTitle);
-            eleTitleBar.appendChild(eleScore);
-
-            let eleNotAlloc = document.createElement("div");
-            eleNotAlloc.className = "tilesWrapper";
-
-            drawSubTiles(eleNotAlloc, "얻은 타일", notAllocTiles);
-
-            let eleAlloc = document.createElement("div");
-            eleAlloc.className = "tilesWrapper";
-
-            drawSubTiles(eleAlloc, "배치한 수식", allocTiles);
-
-            eleWrapper.appendChild(eleTitleBar);
-            eleWrapper.appendChild(eleNotAlloc);
-            eleWrapper.appendChild(eleAlloc);
-            target.appendChild(eleWrapper);
-        })
     })
-}
-
-const draw = () => {
-    let deck = document.getElementById("deck");
-    let teams = document.getElementById("teams");
-
-    drawDeck(deck).then();
-    drawTeams(teams).then();
-}
-
-
-document.body.onload = () => {
-    setInterval(() => {
-        draw();
-    }, 1500);
-}
+}, 1000);
