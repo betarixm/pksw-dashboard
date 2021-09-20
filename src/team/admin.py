@@ -1,14 +1,17 @@
 from django.contrib import admin
-from adminsortable2.admin import SortableInlineAdminMixin
-from game.models import TileSlot
+from game.models import Expression
 
 from .models import Team
 
 
-class TileSlotInline(SortableInlineAdminMixin, admin.TabularInline):
-    model = TileSlot
+class ExpressionInline(admin.StackedInline):
+    model = Expression
+    extra = 0
+    show_change_link = True
+    search_fields = ["tile__team__name"]
 
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
-    inlines = [TileSlotInline, ]
+    inlines = [ExpressionInline]
+
