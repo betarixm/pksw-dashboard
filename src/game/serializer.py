@@ -1,26 +1,34 @@
 from rest_framework import serializers
-from .models import Tile, TileSlot
+from .models import Tile, ExpressionSlot, Expression
 
 
 class TileSerializer(serializers.ModelSerializer):
-    team = serializers.ReadOnlyField(source="slot.team.name")
-    order = serializers.ReadOnlyField(source="slot.order")
+    expression = serializers.ReadOnlyField(source="slot.expression.id")
+    team = serializers.ReadOnlyField(source="team.name")
 
     class Meta:
         model = Tile
         fields = (
             "id",
+            "team",
+            "expression",
             "title",
             "latex",
-            "team",
-            "order",
         )
 
 
-class TileSlotSerializer(serializers.ModelSerializer):
+class ExpressionSlotSerializer(serializers.ModelSerializer):
     tile = TileSerializer(read_only=True)
-    team = serializers.ReadOnlyField(source="team.name")
 
     class Meta:
-        model = TileSlot
-        fields = ("id", "tile", "team", "is_allocated")
+        model = ExpressionSlot
+        fields = ("id", "order", "tile")
+
+
+class ExpressionSerializer(serializers.ModelSerializer):
+    team = serializers.ReadOnlyField(source="team.name")
+    slot = ExpressionSlotSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Expression
+        fields = ("id", "title", "team", "is_completed", "slot")

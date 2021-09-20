@@ -10,9 +10,9 @@ class TeamView(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = Team.objects.all().order_by("id")
-        name = self.request.query_params.get("name")
+        _id = self.request.query_params.get("id")
 
-        if name:
-            queryset = queryset.filter(name=name)
+        if _id:
+            queryset = queryset.filter(id=_id)
 
         return queryset
