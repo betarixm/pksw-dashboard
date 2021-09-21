@@ -15,7 +15,7 @@ class Tile(models.Model):
     class Meta:
         verbose_name = "타일"
         verbose_name_plural = "타일들"
-        ordering = ["team"]
+        ordering = ["team", "title"]
 
     def __str__(self):
         return f"({str(self.team) if hasattr(self, 'team') and self.team else 'DECK'}) {self.title}"
